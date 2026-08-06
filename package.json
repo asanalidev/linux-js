@@ -1,0 +1,23 @@
+{
+  "name": "@asanalidev/linux-js",
+  "version": "1.0.0",
+  "description": "A lightweight Linux kernel emulation framework written in JavaScript",
+  "main": "kernel.js",
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node samples.js"
+  },
+  "keywords": [
+    "linux",
+    "kernel",
+    "emulation",
+    "framework",
+    "os"
+  ],
+  "author": "asanalidev",
+  "license": "MIT",
+  "dependencies": {}
+}
