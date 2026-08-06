@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<linux-js-config>
+    <kernel>
+        <version>6.1.0-torvalds-js</version>
+        <hostname>linux-js-kernel</hostname>
+        <architecture>x86_64</architecture>
+        <max-processes>1024</max-processes>
+        <page-size>4096</page-size>
+    </kernel>
+
+    <subsystems>
+        <subsystem name="VirtualFileSystem" enabled="true" mount-point="/"/>
+        <subsystem name="MemoryManager" enabled="true" total-memory="67108864"/>
+        <subsystem name="NetworkStack" enabled="true" default-ip="192.168.1.15"/>
+        <subsystem name="SecurityManager" enabled="true" enforcing="true"/>
+        <subsystem name="CryptoSubsystem" enabled="true" default-algorithm="sha256"/>
+        <subsystem name="DriverManager" enabled="true"/>
+        <subsystem name="SoundSubsystem" enabled="true"/>
+        <subsystem name="BlockSubsystem" enabled="true"/>
+        <subsystem name="IOURing" enabled="true"/>
+        <subsystem name="Hypervisor" enabled="false"/>
+    </subsystems>
+
+    <security-rules>
+        <rule user="root" permission="full-access"/>
+        <rule user="user" permission="restricted" allowed-paths="/home/user,/proc"/>
+    </security-rules>
+</linux-js-config>
