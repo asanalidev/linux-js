@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library-manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <metadata>
+        <name>@asanali/linux-js</name>
+        <version>1.0.0</version>
+        <description>A lightweight Linux kernel emulation framework written in modular JavaScript.</description>
+        <author>Asanali</author>
+        <license>MIT</license>
+        <repository>https://github.com/asanali/linux-js</repository>
+    </metadata>
+
+    <overview>
+        <summary>Linux.js is a modular framework simulating the Linux kernel architecture (torvalds/linux style) inside pure JavaScript environments (Node.js and browsers).</summary>
+        <installation>
+            <command>npm install @asanali/linux-js</command>
+        </installation>
+    </overview>
+
+    <core-subsystems>
+        <module name="kernel.js" description="Core kernel orchestrator and command dispatcher." />
+        <module name="fs.js" description="Virtual File System (VFS) supporting directories, files, and tree navigation." />
+        <module name="arch.js" description="Architecture-specific layer (x86_64 emulation simulation)." />
+        <module name="mm.js" description="Memory Management subsystem tracking allocation and RAM usage." />
+        <module name="net.js" description="Network stack simulation with loopback and interface management." />
+        <module name="security.js" description="Permissions and access control rules." />
+    </core-subsystems>
+
+    <quick-start-example>
+        <![CDATA[
+import { LinuxKernel } from '@asanali/linux-js';
+
+// Initialize the virtual OS kernel
+const kernel = new LinuxKernel();
+
+// Execute system commands programmatically
+console.log(kernel.executeCommand("uname -a"));
+console.log(kernel.executeCommand("ls"));
+        ]]>
+    </quick-start-example>
+</library-manifest>
