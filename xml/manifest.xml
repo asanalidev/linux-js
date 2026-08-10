@@ -27,7 +27,7 @@
 
     <quick-start-example>
         <![CDATA[
-import { LinuxKernel } from '@asanali/linux-js';
+import { LinuxKernel } from '@asanalidev/linux-js';
 
 // Initialize the virtual OS kernel
 const kernel = new LinuxKernel();
