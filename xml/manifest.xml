@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE asanalidev>s
 <library-manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <metadata>
-        <name>@asanali/linux-js</name>
+        <name>@asanalidev/linux-js</name>
         <version>1.0.0</version>
         <description>A lightweight Linux kernel emulation framework written in modular JavaScript.</description>
         <author>Asanali</author>
         <license>MIT</license>
-        <repository>https://github.com/asanali/linux-js</repository>
+        <repository>https://github.com/asanalidev/linux-js</repository>
     </metadata>
 
     <overview>
         <summary>Linux.js is a modular framework simulating the Linux kernel architecture (torvalds/linux style) inside pure JavaScript environments (Node.js and browsers).</summary>
         <installation>
-            <command>npm install @asanali/linux-js</command>
+            <command>npm install @asanalidev/linux-js</command>
         </installation>
     </overview>
 
