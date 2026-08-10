@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux.js — Симулятор ядра Linux на JavaScript</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/1280px-Tux.svg.png">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050509;
+            --panel-bg: #0a0a12;
+            --accent: #00ff88;
+            --accent-dim: rgba(0, 255, 136, 0.1);
+            --accent-glow: rgba(0, 255, 136, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --border: #1c1c2b;
+            --code-bg: #0f0f17;
+            --font-ui: 'Geist', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 9, 0.8);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .logo::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent);
+            display: block;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .logo span {
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        nav { display: flex; align-items: center; }
+        nav a {
+            color: var(--text-muted);
+            margin-left: 2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        nav a:hover { color: var(--accent); }
+
+        .nav-btn {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-left: 2rem;
+        }
+        .nav-btn:hover {
+            background-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 8rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            filter: blur(200px);
+            opacity: 0.15;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+            font-weight: 700;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, var(--accent), #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--bg-color);
+        }
+        .btn-primary:hover {
+            background-color: #34d399;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background-color: var(--accent-dim);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .install-section {
+            margin-bottom: 8rem;
+        }
+
+        .terminal-window {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .tw-header {
+            background: var(--code-bg);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tw-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .tw-title {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: var(--font-ui);
+        }
+
+        .tw-body {
+            padding: 2rem;
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+
+        .tw-body .cmd { color: var(--text-main); }
+        .tw-body .comment { color: var(--text-muted); opacity: 0.7; }
+        .tw-body .keyword { color: #c678dd; }
+        .tw-body .string { color: #98c379; }
+
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 8rem;
+        }
+
+        .arch-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .arch-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--accent-dim);
+        }
+
+        .arch-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .arch-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background-color: var(--code-bg);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem;
+            background-color: var(--panel-bg);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">linux-js <span>v1.0.0</span></a>
+        <nav>
+            <a href="#features">Архитектура</a>
+            <a href="#install">Установка</a>
+            <a href="https://github.com/asanalidev/linux-js" target="_blank" class="nav-btn">GitHub</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Настоящее ядро <span>Linux</span><br>внутри вашего JavaScript.</h1>
+            <p>Linux.js — это модульный фреймворк, эмулирующий ключевые системные подсистемы, виртуальную файловую систему (VFS), межпроцессное взаимодействие (IPC) и драйверы на чистом JS.</p>
+            <div class="cta-buttons">
+                <a href="#install" class="btn btn-primary">Установить пакет</a>
+                <a href="#features" class="btn btn-secondary">Изучить модули</a>
+            </div>
+        </section>
+
+        <section id="install" class="install-section">
+            <h2 class="section-title">Быстрый старт и пример кода</h2>
+            <p class="section-subtitle">Пакет полностью готов к работе в Node.js и легко подключается через стандартные модули.</p>
+            <div class="terminal-window">
+                <div class="tw-header">
+                    <div class="tw-dot red"></div>
+                    <div class="tw-dot yellow"></div>
+                    <div class="tw-dot green"></div>
+                    <div class="tw-title">консоль разработчика</div>
+                </div>
+                <div class="tw-body">
+                    <span class="cmd">$</span> npm install @asanalidev/linux-js<br><br>
+                    <span class="comment">// Инициализация ядра и подсистем в вашем проекте</span><br>
+                    <span class="keyword">import</span> { <span class="text-main">Kernel</span> } <span class="keyword">from</span> <span class="string">'@asanalidev/linux-js/kernel.js'</span>;<br>
+                    <span class="keyword">import</span> { <span class="text-main">FileSystem</span> } <span class="keyword">from</span> <span class="string">'@asanalidev/linux-js/fs.js'</span>;<br><br>
+                    <span class="keyword">const</span> <span class="text-main">fs</span> = <span class="keyword">new</span> <span class="text-main">FileSystem</span>();<br>
+                    <span class="keyword">const</span> <span class="text-main">kernel</span> = <span class="keyword">new</span> <span class="text-main">Kernel</span>({ fs });<br><br>
+                    <span class="text-main">kernel</span>.<span class="keyword">boot</span>();<br>
+                    <span class="string">console.log</span>(<span class="string">"Linux.js успешно запущен!"</span>);
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="architecture">
+            <div class="arch-card">
+                <h3>📦 Модули ядра</h3>
+                <p>Фреймворк разбит на независимые компоненты для детального контроля над средой выполнения.</p>
+                <div class="tag-list">
+                    <span class="tag">kernel.js</span>
+                    <span class="tag">fs.js</span>
+                    <span class="tag">arch.js</span>
+                    <span class="tag">drivers.js</span>
+                </div>
+            </div>
+            <div class="arch-card">
+                <h3>⚡ Системные фичи</h3>
+                <p>Поддержка виртуальной памяти, управления процессами, криптографических утилит и сетевых сокетов.</p>
+                <div class="tag-list">
+                    <span class="tag">mm.js</span>
+                    <span class="tag">ipc.js</span>
+                    <span class="tag">crypto.js</span>
+                    <span class="tag">net.js</span>
+                </div>
+            </div>
+            <div class="arch-card">
+                <h3>🛠 CI/CD и Экосистема</h3>
+                <p>Настроенная автоматическая сборка через GitHub Actions, строгая типизация и чистый код под MIT лицензией.</p>
+                <div class="tag-list">
+                    <span class="tag">GitHub Actions</span>
+                    <span class="tag">MIT License</span>
+                    <span class="tag">Node.js / Browser</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 Asanali Dev. Проект <a href="https://github.com/asanalidev/linux-js" target="_blank">linux-js</a> распространяется под лицензией MIT.</p>
+    </footer>
+
+</body>
+</html>
