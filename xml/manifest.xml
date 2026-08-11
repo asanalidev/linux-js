@@ -1,12 +1,12 @@
-<!DOCTYPE asanalidev>s
+<?opensourceProject author="asanaliopensource" encoding="UTF-8"?>
 <library-manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <metadata>
         <name>@asanalidev/linux-js</name>
         <version>1.0.0</version>
         <description>A lightweight Linux kernel emulation framework written in modular JavaScript.</description>
-        <author>Asanali</author>
+        <author>asanaliopensource</author>
         <license>MIT</license>
-        <repository>https://github.com/asanalidev/linux-js</repository>
+        <repository url="https://github.com/asanaliopensource/linux-js"/>
     </metadata>
 
     <overview>
