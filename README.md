@@ -1,4 +1,4 @@
-# @asanalidev/linux-js ![Linux.js](https://img.shields.io/badge/%20-black?style=for-the-badge&logo=linux) ![Node.js](https://img.shields.io/badge/%20-white?style=for-the-badge&logo=nodedotjs)
+# asanaliopensource/linux-js ![Linux.js](https://img.shields.io/badge/%20-black?style=for-the-badge&logo=linux) ![Node.js](https://img.shields.io/badge/%20-white?style=for-the-badge&logo=nodedotjs)
 > A lightweight Linux kernel emulation framework written in modular JavaScript.
 
 Linux.js is a lightweight framework that emulates the Linux kernel architecture and its key subsystems in pure JavaScript. The project is designed according to the canonical structure of the `torvalds/linux` kernel source code, divided into independent modules, and can be used to create browser terminals, OS simulators, or for educational purposes.
@@ -55,7 +55,7 @@ console.log(kernel.executeCommand("free"));
 
 1. Clone the repository:
 ```bash
-git clone [https://github.com/asanali/linux-js.git](https://github.com/asanali/linux-js.git)
+git clone https://github.com/asanaliopensource/linux-js.git
 ```
 
 2. Install dependencies (if required) and run tests:
@@ -67,4 +67,4 @@ npm test
 
 ## 📄 License
 
-[MIT](https://github.com/asanalidev/linux-js/blob/main/LICENSE)
+[MIT](https://github.com/asanaliopensource/linux-js/blob/main/LICENSE)
